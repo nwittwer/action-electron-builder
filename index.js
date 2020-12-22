@@ -105,25 +105,30 @@ const runAction = () => {
 	// Disable console advertisements during install phase
 	setEnv("ADBLOCK", true);
 
+	// Install dependencies
 	log(`Installing dependencies using ${useNpm ? "NPM" : "Yarn"}…`);
 	run(useNpm ? "npm install" : "yarn", pkgRoot);
 
-	// Run NPM build script if it exists
-	if (skipBuild) {
-		log("Skipping build script because `skip_build` option is set");
-	} else {
-		log("Running the build script…");
-		if (useNpm) {
-			run(`npm run ${buildScriptName} --if-present`, pkgRoot);
-		} else {
-			// TODO: Use `yarn run ${buildScriptName} --if-present` once supported
-			// https://github.com/yarnpkg/yarn/issues/6894
-			const pkgJson = JSON.parse(readFileSync(pkgJsonPath, "utf8"));
-			if (pkgJson.scripts && pkgJson.scripts[buildScriptName]) {
-				run(`yarn run ${buildScriptName}`, pkgRoot);
-			}
-		}
-	}
+	// Run build script if it exists
+	log("Building the Electron app...");
+	run(`yarn run build`, pkgRoot);
+
+	
+	// if (skipBuild) {
+	// 	log("Skipping build script because `skip_build` option is set");
+	// } else {
+	// 	log("Running the build script…");
+	// 	if (useNpm) {
+	// 		run(`npm run ${buildScriptName} --if-present`, pkgRoot);
+	// 	} else {
+	// 		// TODO: Use `yarn run ${buildScriptName} --if-present` once supported
+	// 		// https://github.com/yarnpkg/yarn/issues/6894
+	// 		const pkgJson = JSON.parse(readFileSync(pkgJsonPath, "utf8"));
+	// 		if (pkgJson.scripts && pkgJson.scripts[buildScriptName]) {
+	// 			run(`yarn run ${buildScriptName}`, pkgRoot);
+	// 		}
+	// 	}
+	// }
 
 	// log(`Building${release ? " and releasing" : ""} the Electron app…`);
 	// const cmd = useVueCli ? "vue-cli-service electron:build" : "electron-builder";
