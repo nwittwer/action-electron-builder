@@ -107,7 +107,7 @@ const runAction = () => {
 
 	// Install dependencies
 	log(`Installing dependencies using ${useNpm ? "NPM" : "Yarn"}…`);
-	run(useNpm ? "npm install" : "yarn", pkgRoot);
+	run(useNpm ? "npm install" : "yarn install", pkgRoot);
 
 	// Run build script if it exists
 	log("Building the Electron app...");
